@@ -9,15 +9,13 @@
 static char buf[4096];
 
 int main(int argc, char *argv[]) {
-	for (int i = 0; i < argc; ++i) {
-		// Skip the first argument (program name).
-		if (i == 0) continue;
-
+	// Skip the first argument (program name).
+	for (int i = 1; i < argc; ++i) {
 		// Open the file.
 		int fd = open(argv[i], O_RDONLY);
 		if  (fd == 0) {
 			perror("failed to open");
-			exit(1);
+			return 1;
 		}
 
 		// Read the file into the buffer, then print it to stdout.
@@ -25,7 +23,7 @@ int main(int argc, char *argv[]) {
 		while ((count = read(fd, &buf, sizeof(buf))) != 0) {
 			if (count < 1) {
 				perror("failed to read");
-				exit(1);
+				return 1;
 			}
 			// To prevent printing contents from a read that
 			// didn't fill the buffer, terminate the string.
